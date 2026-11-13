@@ -1,11 +1,13 @@
 // node make-music-lua.js <rom.nes> [pack.json5 ...]
 // Matches each music slot of a ZORA ROM to the track in your pack and writes music-now.lua (names inside) next to the ROM's folder.
 // Prints only how sure it is; track names stay in the Lua file.
+// Replace "C:/Users/username/json5 file path folder" with the folder containing your roms.
 const fs = require("fs"), path = require("path");
 const c = require("./core.js");
 const [rom, ...given] = process.argv.slice(2);
-const PACKS = given.length ? given : (fs.existsSync(path.join(__dirname, "packs-zora.txt")) ? fs.readFileSync(path.join(__dirname, "packs-zora.txt"), "utf8").split("\n").map(l => l.trim()).filter(Boolean) : []);
-if (!rom || !PACKS.length) { console.log("Usage: node make-music-lua.js <rom.nes> [pack.json5 ...]  (or list your packs in packs-zora.txt, one path per line)"); process.exit(1); }
+const PACK_DIR = "C:/Users/username/json5 file path folder";
+const listPacks = dir => fs.readdirSync(dir, { withFileTypes: true }).flatMap(e => e.isDirectory() ? listPacks(path.join(dir, e.name)) : /\.json5$/i.test(e.name) ? [path.join(dir, e.name)] : []);
+const PACKS = given.length ? given : listPacks(PACK_DIR);
 const R = fs.readFileSync(rom), HEADER = 0x10, TABLE = 0x10, ADDR = 0x90, BANK = 0x4000, BASE = 0x8000;   // ZORA's lozft layout
 const SONGS = { overworld: 0, ending: 4, level9: 5, title: 7, level1: 6, level2: 11, level3: 12, level4: 13, level5: 14, level6: 15, level7: 16, level8: 17 };
 
