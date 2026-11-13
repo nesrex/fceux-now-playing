@@ -1,3 +1,6 @@
+// Replace "%FCEUX%" in lines 15 & 18 with your filepath location.
+
+
 @echo off
 rem Drag a ZORA ROM onto this file: it finds the ROM's songs in your packs, then opens FCEUX with the now-playing script.
 rem FCEUX: put the full path to fceux64.exe in fceux-path.txt (or leave it out if fceux64.exe is on your PATH).
